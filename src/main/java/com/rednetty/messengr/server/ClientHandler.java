@@ -63,9 +63,11 @@ public class ClientHandler implements Runnable {
             username = "Guest";
         }
 
-        // Check for admin password
-        if (username.contains(":admin:password123")) {
-            username = username.replace(":admin:password123", "");
+        // Check for admin password via environment variable
+        String adminPassword = System.getenv("ADMIN_PASSWORD");
+        String adminToken = ":admin:" + (adminPassword != null ? adminPassword : "");
+        if (adminPassword != null && !adminPassword.isEmpty() && username.contains(adminToken)) {
+            username = username.replace(adminToken, "");
             isAdmin = true;
         }
 

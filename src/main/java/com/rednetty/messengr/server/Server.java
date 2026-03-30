@@ -23,7 +23,7 @@ public class Server {
 
     private ServerSocket serverSocket;
     private ExecutorService threadPool;
-    ConcurrentHashMap<UUID, ClientHandler> connectedClients;
+    private ConcurrentHashMap<UUID, ClientHandler> connectedClients;
     private ConcurrentHashMap<String, ChatRoom> chatRooms;
     private List<ChatMessage> globalMessageHistory;
     private AtomicBoolean isRunning = new AtomicBoolean(true);

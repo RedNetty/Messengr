@@ -38,3 +38,13 @@ build/
 *.log
 logs/
 chat_server.log
+
+### Maven archetype boilerplate ###
+src/main/resources/archetype-resources/
+src/main/resources/META-INF/
+
+### Build artifacts ###
+*.class
+*.jar
+!*-sources.jar
+Thumbs.db
