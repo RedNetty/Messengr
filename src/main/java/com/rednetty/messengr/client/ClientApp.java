@@ -76,17 +76,15 @@ public class ClientApp {
         shutdown();
     }
 
-    private void displayWelcomeMessage() {
-        System.out.println(colorize(ANSI_CYAN, "╔══════════════════════════════════════╗"));
-        System.out.println(colorize(ANSI_CYAN, "║      Messenger Client        ║"));
-        System.out.println(colorize(ANSI_CYAN, "║                                      ║"));
-        System.out.println(colorize(ANSI_CYAN, "║  Features:                           ║"));
-        System.out.println(colorize(ANSI_CYAN, "║  • Multiple chat rooms               ║"));
-        System.out.println(colorize(ANSI_CYAN, "║  • Private messaging                 ║"));
-        System.out.println(colorize(ANSI_CYAN, "║  • Advanced commands                 ║"));
-        System.out.println(colorize(ANSI_CYAN, "║  • Auto-reconnection                 ║"));
-        System.out.println(colorize(ANSI_CYAN, "║                                      ║"));
-        System.out.println(colorize(ANSI_CYAN, "╚══════════════════════════════════════╝"));
+        private void displayWelcomeMessage() {
+        System.out.println(colorize(ANSI_CYAN, "============================================"));
+        System.out.println(colorize(ANSI_CYAN, "         Messengr Chat Client               "));
+        System.out.println(colorize(ANSI_CYAN, "============================================"));
+        System.out.println(colorize(ANSI_CYAN, "  [*] Multiple chat rooms                   "));
+        System.out.println(colorize(ANSI_CYAN, "  [*] Private messaging                     "));
+        System.out.println(colorize(ANSI_CYAN, "  [*] Advanced commands                     "));
+        System.out.println(colorize(ANSI_CYAN, "  [*] Auto-reconnection                     "));
+        System.out.println(colorize(ANSI_CYAN, "============================================"));
         System.out.println();
     }
 
@@ -123,8 +121,8 @@ public class ClientApp {
             System.out.print(colorize(ANSI_YELLOW, "Admin password (optional, press Enter to skip): "));
             String adminPassword = scanner.nextLine().trim();
 
-            if (!adminPassword.isEmpty() && adminPassword.equals("password123")) {
-                username += ":admin:password123";
+            if (!adminPassword.isEmpty()) {
+                username += ":admin:" + adminPassword;
                 printInfo("Attempting admin authentication...");
             }
 
@@ -338,39 +336,39 @@ public class ClientApp {
     }
 
     private void printMessage(String message) {
-        System.out.println(colorize(ANSI_GREEN, "💬 " + message));
+        System.out.println(colorize(ANSI_GREEN, "[>>] " + message));
     }
 
     private void printPrivateMessage(String message) {
-        System.out.println(colorize(ANSI_PURPLE, "📨 " + message));
+        System.out.println(colorize(ANSI_PURPLE, "[PM] " + message));
     }
 
     private void printPrivateSent(String message) {
-        System.out.println(colorize(ANSI_PURPLE, "📤 " + message));
+        System.out.println(colorize(ANSI_PURPLE, "[->] " + message));
     }
 
     private void printServer(String message) {
-        System.out.println(colorize(ANSI_CYAN, "🔧 [Server] " + message));
+        System.out.println(colorize(ANSI_CYAN, "[Server] " + message));
     }
 
     private void printHistory(String message) {
-        System.out.println(colorize(ANSI_BLUE, "📜 " + message));
+        System.out.println(colorize(ANSI_BLUE, "[History] " + message));
     }
 
     private void printError(String message) {
-        System.out.println(colorize(ANSI_RED, "❌ Error: " + message));
+        System.out.println(colorize(ANSI_RED, "[!] Error: " + message));
     }
 
     private void printWarning(String message) {
-        System.out.println(colorize(ANSI_YELLOW, "⚠️ Warning: " + message));
+        System.out.println(colorize(ANSI_YELLOW, "[W] Warning: " + message));
     }
 
     private void printSuccess(String message) {
-        System.out.println(colorize(ANSI_GREEN, "✅ " + message));
+        System.out.println(colorize(ANSI_GREEN, "[OK] " + message));
     }
 
     private void printInfo(String message) {
-        System.out.println(colorize(ANSI_BLUE, "ℹ️ " + message));
+        System.out.println(colorize(ANSI_BLUE, "[i] " + message));
     }
 
     private String colorize(String color, String text) {
@@ -402,7 +400,7 @@ public class ClientApp {
             }
         }
 
-        System.out.println(colorize(ANSI_GREEN, "👋 Goodbye! Thanks for using  Messenger!"));
+        System.out.println(colorize(ANSI_GREEN, "Goodbye! Thanks for using Messengr!"));
     }
 
     private void closeQuietly(AutoCloseable resource) {

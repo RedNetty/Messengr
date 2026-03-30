@@ -1,6 +1,8 @@
 package com.rednetty.messengr.server;
 
 import com.rednetty.messengr.shared.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -16,6 +18,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Server {
+
+    private static final Logger logger = LoggerFactory.getLogger(Server.class);
     private static final int PORT = 7234;
     private static final int MAX_CLIENTS = 100;
     private static final int MAX_MESSAGE_HISTORY = 50;
@@ -334,8 +338,7 @@ public class Server {
     }
 
     void log(String message) {
-        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        System.out.println("[" + timestamp + "] " + message);
+        logger.info(message);
     }
 
     private void shutdown() {
