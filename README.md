@@ -1,101 +1,107 @@
-# Multi-User Chat Application
+# Messengr
 
-A Java-based chat system that supports multiple users, chat rooms, and private messaging. Built to demonstrate network programming, multithreading, and client-server architecture concepts.
+**A multi-user TCP chat application built in Java.**
+
+Messengr is a real-time chat system with support for multiple chat rooms, private messaging, and admin controls. Built to demonstrate socket programming, multithreading, and client-server architecture in Java.
 
 ## Features
 
-- **Multi-user support** - Multiple clients can connect simultaneously
-- **Chat rooms** - Create and join different rooms for organized discussions
-- **Private messaging** - Send direct messages between users
-- **Real-time communication** - Messages appear instantly across all clients
-- **Admin commands** - Basic user management capabilities
-- **Auto-reconnection** - Client automatically reconnects if connection is lost
-- **Message history** - Shows recent messages when joining a room
+- **Multi-user support** — Multiple clients can connect simultaneously
+- **Chat rooms** — Create and join named rooms for organized discussions
+- **Private messaging** — Direct messages between individual users
+- **Real-time communication** — Messages delivered instantly across all clients
+- **Admin commands** — User management (kick, view stats)
+- **Auto-reconnection** — Client automatically reconnects on dropped connections
+- **Message history** — Shows recent messages when joining a room
+- **Configurable** — Server behavior controlled via `server.properties`
 
 ## Technical Implementation
 
 ### Architecture
 - **Client-Server model** using TCP sockets
-- **Thread-per-client** design with connection pooling
-- **Concurrent data structures** for thread safety
-- **Custom protocol** for different message types
+- **Thread-per-client** design with an `ExecutorService` thread pool
+- **Concurrent data structures** (`ConcurrentHashMap`, `AtomicBoolean`) for thread safety
+- **Custom protocol** for routing different message types (room messages, private messages, commands, system notifications)
 
-### Key Java Concepts Used
-- Socket programming for network communication
-- Multithreading with ExecutorService and thread pools
-- Concurrent collections (ConcurrentHashMap, AtomicBoolean)
-- Proper resource management and cleanup
-- Exception handling and error recovery
-
-### Server Features
-- Handles up to 100 concurrent connections
-- Thread-safe user and room management
-- Automatic cleanup of inactive connections
-- Configurable settings via properties file
+### Key Java Concepts
+- Socket programming (`ServerSocket` / `Socket`)
+- Multithreading with `ExecutorService`
+- Concurrent collections
+- Resource management with try-with-resources
+- Graceful shutdown handling
 
 ## Getting Started
 
 ### Prerequisites
-- Java 8 or higher
+- Java 8+
 
 ### Running the Application
 
-1. **Start the server:**
-   ```bash
-   javac Server.java
-   java Server
-   ```
+**1. Start the server:**
+```bash
+mvn clean package
+java -cp target/messengr.jar com.rednetty.messengr.server.Server
+```
 
-2. **Run the client (in a new terminal):**
-   ```bash
-   javac ClientApp.java
-   java ClientApp
-   ```
+**2. Connect a client (in a new terminal):**
+```bash
+java -cp target/messengr.jar com.rednetty.messengr.client.ClientApp
+```
 
-3. **Connect multiple clients** by running the client command in additional terminals
+**3. Connect additional clients** by opening more terminals and repeating step 2.
 
-## Usage
+### Configuration
 
-### Basic Commands
-- `/help` - Show available commands
-- `/users` - List users in current room
-- `/rooms` - List all available rooms
-- `/join <room>` - Join a specific room
-- `/create <room>` - Create a new room
-- `/msg <user> <message>` - Send private message
-- `/quit` - Exit the application
+Edit `src/main/resources/server.properties` to adjust server settings:
 
-### Admin Commands
-- `/kick <user>` - Remove a user (admin only)
-- `/stats` - Show server statistics
+```properties
+server.port=7234
+server.max_clients=100
+security.admin_password=${ADMIN_PASSWORD:changeme}
+```
 
-*To get admin privileges, use the password "password123" when prompted during login*
+> Set the `ADMIN_PASSWORD` environment variable before starting the server to configure the admin password securely.
+
+## Chat Commands
+
+| Command | Description |
+|---------|-------------|
+| `/help` | Show available commands |
+| `/users` | List users in current room |
+| `/rooms` | List all available rooms |
+| `/join <room>` | Join a room |
+| `/create <room>` | Create a new room |
+| `/msg <user> <message>` | Send a private message |
+| `/status` | Show connection status |
+| `/quit` | Exit |
+
+Admin commands (require server password):
+
+| Command | Description |
+|---------|-------------|
+| `/kick <user>` | Remove a user from the server |
+| `/stats` | View server statistics |
 
 ## Project Structure
 
 ```
-src/
-├── com/rednetty/messengr/
-│   ├── server/
-│   │   └── Server.java          # Main server logic
-│   ├── client/
-│   │   └── ClientApp.java       # Client application
-│   └── shared/
-│       └── User.java            # User data model
+src/main/java/com/rednetty/messengr/
+├── client/
+│   └── ClientApp.java      # Terminal-based chat client
+├── server/
+│   ├── Server.java         # Main server (accepts connections, manages rooms/users)
+│   ├── ClientHandler.java  # Per-client thread: reads/routes messages
+│   ├── ChatRoom.java       # Room state and broadcast logic
+│   └── ChatMessage.java    # Message data model
+└── shared/
+    └── User.java           # Shared user model
 ```
 
-## Known Issues
-- Server only runs on localhost currently
-- No persistent message storage
-- Basic authentication system
-
-## Future Improvements
-- Add database storage for messages and users
-- Implement file sharing capabilities
-- Add web-based client interface
-- Improve security with proper authentication
-- Add message encryption
+## Known Limitations
+- Server runs on localhost; remote connections require firewall configuration
+- No persistent message storage (history is in-memory only)
+- Basic authentication (password-based admin access)
 
 ---
 
-Built as a learning project to explore network/socket programming and concurrent system design in Java.
+Built as a deep dive into concurrent network programming in Java.
