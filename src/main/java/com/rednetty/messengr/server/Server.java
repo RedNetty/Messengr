@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class Server {
 
     private static final Logger logger = LoggerFactory.getLogger(Server.class);
-    private static final int PORT = 7234;
+    private static final int DEFAULT_PORT = 7234;
     private static final int MAX_CLIENTS = 100;
     private static final int MAX_MESSAGE_HISTORY = 50;
     private static final String DEFAULT_ROOM = "general";
@@ -43,9 +43,12 @@ public class Server {
         loadConfiguration();
         initializeServer();
 
+        int port = Integer.parseInt(
+                serverConfig.getProperty("server.port", String.valueOf(DEFAULT_PORT)));
+
         try {
-            serverSocket = new ServerSocket(PORT);
-            log(" Chat Server started on port " + PORT);
+            serverSocket = new ServerSocket(port);
+            log(" Chat Server started on port " + port);
             log("Maximum clients: " + MAX_CLIENTS);
             log("Waiting for clients to connect...");
 
@@ -335,6 +338,15 @@ public class Server {
                     .limit(10) // Send last 10 messages
                     .forEach(msg -> client.sendMessage("HISTORY:" + msg.getContent()));
         }
+    }
+
+    /**
+     * Package-private helper that initialises server state without binding a
+     * ServerSocket.  Used exclusively by unit tests.
+     */
+    void initializeServerForTest() {
+        serverConfig = new Properties();
+        initializeServer();
     }
 
     void log(String message) {
